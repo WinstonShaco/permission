@@ -11,15 +11,16 @@
     </settings>
 
     <!--<typeAliases>-->
-    <!---->
+    <!--起个别名-->
     <!--</typeAliases>-->
 
+    <!-- 做监听 -->
     <!--<plugins>-->
     <!--<plugin interceptor=""></plugin>-->
     <!--</plugins>-->
 
     <!--<typeHandlers>-->
-    <!---->
+    <!-- 与枚举映射相关 -->
     <!--</typeHandlers>-->
 
 </configuration>

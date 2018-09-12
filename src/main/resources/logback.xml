@@ -7,6 +7,7 @@
         </encoder>
     </appender>
 
+    <!-- logger -->
     <!--<appender name="permission" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
         <!--<file>${catalina.home}/logs/permission.log</file>-->
         <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->

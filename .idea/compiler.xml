@@ -9,8 +9,11 @@
         <module name="permission" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.7">
       <module name="permission" target="1.7" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="DEBUGGING_INFO" value = "false"/>
   </component>
 </project>
