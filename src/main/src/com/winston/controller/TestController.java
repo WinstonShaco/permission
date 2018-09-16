@@ -1,10 +1,14 @@
 package com.winston.controller;
 
+import com.winston.common.ApplicationContextHelper;
 import com.winston.common.JsonData;
+import com.winston.dao.SysAclModuleMapper;
 import com.winston.exception.ParamException;
 import com.winston.exception.PermissionException;
+import com.winston.model.SysAclModule;
 import com.winston.param.TestVo;
 import com.winston.util.BeanValidator;
+import com.winston.util.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.collections.MapUtils;
@@ -45,6 +49,9 @@ public class TestController {
     @ResponseBody
     public JsonData validate(TestVo vo) throws ParamException{
         log.info("validate");
+        SysAclModuleMapper moduleMapper = ApplicationContextHelper.popBean(SysAclModuleMapper.class);
+        SysAclModule module = moduleMapper.selectByPrimaryKey(1);
+        log.info(JsonMapper.obj2String(module));
         BeanValidator.check(vo);
 //        try {
 //            //这里通过validateObject来校验

@@ -26,7 +26,7 @@
     <!--<mvc:resources location="/assets/" mapping="/assets/**"/>-->
     <!--<mvc:resources location="/ztree/" mapping="/ztree/**"/>-->
 
-    <!--<bean class="com.winston.common.ApplicationContextHelper" lazy-init="false" />-->
+    <bean class="com.winston.common.ApplicationContextHelper" lazy-init="false" />
 
     <!--<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />-->
 
