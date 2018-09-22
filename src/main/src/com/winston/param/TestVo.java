@@ -31,7 +31,7 @@ public class TestVo {
     //不允许为空
     private Integer id;
 
-    @NotEmpty
+    //@NotEmpty
     //数组或者list校验不为空
     private List<String> str;
 }
