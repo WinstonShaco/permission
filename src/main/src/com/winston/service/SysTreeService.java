@@ -105,5 +105,5 @@ public class SysTreeService {
         public int compare(DeptLevelDto o1, DeptLevelDto o2) {
             return o1.getSeq() - o2.getSeq();
         }
-    }
+    };
 }
