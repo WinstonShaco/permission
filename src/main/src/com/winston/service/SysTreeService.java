@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * @Author: 于新泽
  * @Date: Created in 22:44 2018/9/25.
- * @site :
+ * @site : 计算树的结构
  */
 
 @Service
@@ -32,6 +32,7 @@ public class SysTreeService {
      * @return
      */
     public List<DeptLevelDto> deptTree(){
+
         List<SysDept> deptList = sysDeptMapper.getAllDept();
 
         List<DeptLevelDto> dtoList = Lists.newArrayList();
@@ -52,8 +53,10 @@ public class SysTreeService {
         if (CollectionUtils.isEmpty(deptLevelList)) {
             return Lists.newArrayList();
         }
-        // level -> [dept1, dept2, ...]
+        // level -> [dept1, dept2, ...] 以 level 为 key ，后面存储的是dept的列表
+        // List 的每一个结构都是 DeptLevelDto
         Multimap<String, DeptLevelDto> levelDeptMap = ArrayListMultimap.create();
+        // 一级部门
         List<DeptLevelDto> rootList = Lists.newArrayList();
 
         for(DeptLevelDto dto : deptLevelList) {
@@ -63,13 +66,14 @@ public class SysTreeService {
             }
         }
         //按照 seq 从小到大排序
+        // Comparator 比较器
         Collections.sort(rootList, new Comparator<DeptLevelDto>() {
             @Override
             public int compare(DeptLevelDto o1, DeptLevelDto o2) {
                 return o1.getSeq() - o2.getSeq();
             }
         });
-        //递归生成树
+        //递归生成树 每遍历一次都会对当前树形结构进行处理
         transformDeptTree(rootList, LevelUtil.ROOT, levelDeptMap);
         return rootList;
     }
@@ -100,6 +104,9 @@ public class SysTreeService {
         }
     }
 
+    /**
+     * 将部门根据 seq 进行排序
+     */
     public Comparator<DeptLevelDto> deptSeqComparator = new Comparator<DeptLevelDto>() {
         @Override
         public int compare(DeptLevelDto o1, DeptLevelDto o2) {

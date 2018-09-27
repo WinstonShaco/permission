@@ -20,15 +20,17 @@ import java.util.List;
 @ToString
 public class DeptLevelDto extends SysDept{
 
+    // List下包含自己 可以展示出树形结构
     private List<DeptLevelDto> deptList = Lists.newArrayList();
 
     /**
-     * 当传入 dept 的时候可以直接转换当前结构
+     * 当传入 sysDept 的时候可以直接转换当前结构
      * @param dept
      * @return
      */
     public static DeptLevelDto adapt(SysDept dept){
         DeptLevelDto dto = new DeptLevelDto();
+        //copy bean的一个工具
         BeanUtils.copyProperties(dept, dto);
         return dto;
     }
