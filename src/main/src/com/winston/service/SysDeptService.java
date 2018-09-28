@@ -31,6 +31,7 @@ public class SysDeptService {
      * @param param ：
      */
     public void save(DeptParam param){
+        //参数校验
         BeanValidator.check(param);
         if (checkExist(param.getParentId(),param.getName(),param.getId())){
             throw new ParamException("同一层级下存在相同名称的部门");
@@ -56,7 +57,7 @@ public class SysDeptService {
      * @param parentId ：上级部门ID
      * @param deptName ：部门名字
      * @param deptId ：部门ID
-     * @return
+     * @return ： 如果大于0 就说明当前值存在了
      */
     private boolean checkExist(Integer parentId, String deptName, Integer deptId){
         return sysDeptMapper.countByNameAndParentId(parentId, deptName, deptId) > 0;
@@ -72,6 +73,7 @@ public class SysDeptService {
 
     public void update(DeptParam param) {
 
+        //参数校验
         BeanValidator.check(param);
         if (checkExist(param.getParentId(), param.getName(), param.getId())) {
             throw new ParamException("同一层级下存在相同名称的部门");
@@ -99,13 +101,21 @@ public class SysDeptService {
         updateWithChild(before,after);
     }
 
+    /**
+     * 更新当前部门，以及该部门下的子部门。
+     * 这里就要求用事务。
+     * @param before : 更新之前的部门
+     * @param after ： 更新之后的部门
+     */
     @Transactional
     private void updateWithChild(SysDept before, SysDept after){
 
 
         String newLevelPrefix = after.getLevel();
         String oldLevelPrefix = before.getLevel();
+        //判断一下是否需要更新子部门
         if(!after.getLevel().equals(before.getLevel())){
+            //先取出当前部门的子部门
             List<SysDept> deptList = sysDeptMapper.getChildDeptListByLevel(before.getLevel());
             if(CollectionUtils.isNotEmpty(deptList)){
                 for (SysDept dept : deptList) {

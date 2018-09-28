@@ -23,11 +23,12 @@ public interface SysDeptMapper {
     // 获取当前部门的列表
     List<SysDept> getAllDept();
 
+    //取出当前部门的子部门
     List<SysDept> getChildDeptListByLevel(@Param("level") String level);
 
     //批量更新level
     void batchUpdateLevel(@Param("sysDeptList") List<SysDept> sysDeptList);
 
-    //
+    //校验部门名称是否重复
     int countByNameAndParentId(@Param("parentId") int parentId, @Param("name") String name, @Param("id") Integer id);
 }
