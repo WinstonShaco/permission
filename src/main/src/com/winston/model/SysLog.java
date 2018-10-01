@@ -21,6 +21,26 @@ public class SysLog {
     //当前是否复原过，0：没有，1：复原过
     private Integer status;
 
+    private String operator;
+
+    private String operatorIp;
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    public String getOperatorIp() {
+        return operatorIp;
+    }
+
+    public void setOperatorIp(String operatorIp) {
+        this.operatorIp = operatorIp;
+    }
+
     public Integer getId() {
         return id;
     }

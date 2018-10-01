@@ -2,9 +2,6 @@ package com.winston.dao;
 
 import com.winston.model.SysDept;
 import org.apache.ibatis.annotations.Param;
-import org.hibernate.validator.constraints.ParameterScriptAssert;
-
-import javax.annotation.PreDestroy;
 import java.util.List;
 
 public interface SysDeptMapper {
@@ -30,5 +27,5 @@ public interface SysDeptMapper {
     void batchUpdateLevel(@Param("sysDeptList") List<SysDept> sysDeptList);
 
     //校验部门名称是否重复
-    int countByNameAndParentId(@Param("parentId") int parentId, @Param("name") String name, @Param("id") Integer id);
+    int countByNameAndParentId(@Param("parentId") Integer parentId, @Param("name") String name, @Param("id") Integer id);
 }

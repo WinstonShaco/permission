@@ -18,6 +18,26 @@ public class SysRoleUser {
     //用户id
     private Integer userId;
 
+    private String operator;
+
+    private String operatorIp;
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    public String getOperatorIp() {
+        return operatorIp;
+    }
+
+    public void setOperatorIp(String operatorIp) {
+        this.operatorIp = operatorIp;
+    }
+
     public Integer getId() {
         return id;
     }
