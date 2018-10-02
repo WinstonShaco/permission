@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,8 +45,8 @@ public class SysDeptService {
                 .build();
 
         dept.setLevel(LevelUtil.calculateLevel(getLevel(param.getParentId()), param.getParentId()));
-        //dept.setOperator("system");
-        //dept.setOperator("127.0.0.1");
+        dept.setOperator("system");
+        dept.setOperator("127.0.0.1");
         //dept.setOperator(new Date());
         sysDeptMapper.insertSelective(dept);
     }
@@ -94,8 +95,8 @@ public class SysDeptService {
                 .remark(param.getRemark())
                 .build();
         after.setLevel(LevelUtil.calculateLevel(getLevel(param.getParentId()),param.getParentId()));
-        //after.setOperator("system");
-        //after.setOperator("127.0.0.1");
+        after.setOperator("system");
+        after.setOperator("127.0.0.1");
         //after.setOperator(new Date());
 
         updateWithChild(before,after);
@@ -108,7 +109,7 @@ public class SysDeptService {
      * @param after ： 更新之后的部门
      */
     @Transactional
-    private void updateWithChild(SysDept before, SysDept after){
+    void updateWithChild(SysDept before, SysDept after){
 
 
         String newLevelPrefix = after.getLevel();

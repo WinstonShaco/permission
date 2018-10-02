@@ -39,7 +39,7 @@ public class SysAcl {
 
     private String operator;
 
-    private String operatorIp;
+    private String operateIp;
 
     public String getOperator() {
         return operator;
@@ -49,13 +49,14 @@ public class SysAcl {
         this.operator = operator;
     }
 
-    public String getOperatorIp() {
-        return operatorIp;
+    public String getOperateIp() {
+        return operateIp;
     }
 
-    public void setOperatorIp(String operatorIp) {
-        this.operatorIp = operatorIp;
+    public void setOperateIp(String operateIp) {
+        this.operateIp = operateIp;
     }
+
 
     public Integer getId() {
         return id;
