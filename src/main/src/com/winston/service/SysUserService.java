@@ -1,6 +1,8 @@
 package com.winston.service;
 
 import com.google.common.base.Preconditions;
+import com.winston.beans.PageQuery;
+import com.winston.beans.PageResult;
 import com.winston.dao.SysUserMapper;
 import com.winston.exception.ParamException;
 import com.winston.model.SysUser;
@@ -10,6 +12,7 @@ import com.winston.util.MD5Util;
 import com.winston.util.PasswordUtil;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Author: 于新泽
@@ -89,6 +92,16 @@ public class SysUserService {
      */
     public SysUser findByKeyword(String keyword) {
         return sysUserMapper.findByKeyword(keyword);
+    }
+
+    public PageResult<SysUser> getPageByDeptId(int deptId, PageQuery page){
+        BeanValidator.check(page);
+        int count = sysUserMapper.countByDeptId(deptId);
+        if(count > 0){
+            List<SysUser> list = sysUserMapper.getPageByDeptId(deptId, page);
+            return PageResult.<SysUser>builder().total(count).data(list).build();
+        }
+        return PageResult.<SysUser>builder().build();
     }
 }
 

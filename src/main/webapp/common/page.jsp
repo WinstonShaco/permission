@@ -42,14 +42,14 @@
     Mustache.parse(paginateTemplate);
 
     /**
-     *
+     * 分页函数
      * @param url : 请求的链接
      * @param total : 当前满足的行数
      * @param pageNo : 当前是多少页
      * @param pageSize : 每页显示多少行数
      * @param currentSize : 当前这一页返回结果多少条
-     * @param idElement :
-     * @param callback :
+     * @param idElement : 取到的值放在 idElement 中
+     * @param callback : 回调
      */
     function renderPage(url, total, pageNo, pageSize, currentSize, idElement, callback){
         // 当前最大的页数
@@ -63,6 +63,7 @@
             from: from > total ? total : from,
             to: (from + currentSize - 1) > total ? total : (from + currentSize - 1),
             total: total,
+            pageNo: pageNo,
             maxPageNo: maxPageNo,
             nextPageNo: pageNo >= maxPageNo ? maxPageNo : (pageNo + 1),
             beforePageNo: pageNo == 1 ? 1 :(pageNo - 1),
@@ -80,7 +81,7 @@
             var targetUrl = $(this).attr("data-url");
             if(targetUrl != ''){
                 $.ajax({
-                    url : tergetUrl,
+                    url : targetUrl,
                     success : function(result){
                         if(callback){
                             callback(result, url);

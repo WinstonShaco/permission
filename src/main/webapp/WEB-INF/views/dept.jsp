@@ -10,6 +10,7 @@
 <head>
     <title>部门管理</title>
     <jsp:include page="/common/backend_common.jsp"/>
+    <jsp:include page="/common/page.jsp"/>
 </head>
 <body class="no-skin" youdao="bind" style="background: white">
 <input id="gritter-light" checked="" type="checkbox" class="ace ace-switch ace-switch-5"/>
@@ -174,251 +175,27 @@
 </ol>
 </script>
 
-<%--<script type="application/javascript">--%>
-    <%--$(function(){--%>
-
-        <%--// 存储树形部门列表--%>
-        <%--var deptList;--%>
-        <%--// 用 deptMap 来缓存部门列表的所有信息--%>
-        <%--var deptMap = {};--%>
-        <%--//选项的值组成的字符串--%>
-        <%--var optionStr = "";--%>
-        <%--// 用来存储上次点击的部门 Id--%>
-        <%--var lastClickDeptId = -1;--%>
-        <%--// 取到当前 deptListTemplate 的 html--%>
-        <%--var deptListTemplate = $('#deptListTemplate').html();--%>
-        <%--Mustache.parse(deptListTemplate);--%>
-
-        <%--// 在页面刚加载的时候加载 loadDeptTree 这个函数--%>
-        <%--loadDeptTree();--%>
-
-        <%--function loadDeptTree(){--%>
-            <%--$.ajax({--%>
-                <%--url:"/sys/dept/tree.json",--%>
-                <%--// 如果请求成功的话--%>
-                <%--success : function(result){--%>
-                    <%--if(result.ret){--%>
-                        <%--deptList = result.data;--%>
-                        <%--// 当拿到deptList 的时候做渲染--%>
-                        <%--var rendered = Mustache.render(deptListTemplate, {deptList: result.data});--%>
-                        <%--// 渲染首层--%>
-                        <%--$("#deptList").html(rendered);--%>
-                        <%--// 递归渲染部门层级--%>
-                        <%--recursiveRenderDept(result.data);--%>
-                        <%--bindDeptClick();--%>
-                    <%--} else {--%>
-                        <%--showMessage("加载部门列表", result.msg, false);--%>
-                    <%--}--%>
-                <%--}--%>
-            <%--})--%>
-        <%--}--%>
-
-        <%--// 递归渲染部门树--%>
-        <%--function recursiveRenderDept(deptList){--%>
-            <%--if(deptList && deptList.length > 0){--%>
-                <%--$(deptList).each(function(i, dept){--%>
-                    <%--deptMap[dept.id] = dept;--%>
-                    <%--// 如果当前部门有子部门的时候--%>
-                    <%--if(dept.deptList.length > 0){--%>
-                        <%--var rendered = Mustache.render(deptListTemplate, {deptList: dept.deptList});--%>
-                        <%--// 将当前生成的 html 片段绑定到页面上去--%>
-                        <%--$("#dept_" + dept.id).append(rendered);--%>
-                        <%--recursiveRenderDept(dept.deptList);--%>
-                    <%--}--%>
-                <%--})--%>
-            <%--}--%>
-        <%--}--%>
-
-        <%--// 绑定点击部门的事件--%>
-        <%--function bindDeptClick (){--%>
-
-            <%--// 点击部门名称--%>
-            <%--$(".dept-name").click(function(e){--%>
-                <%--e.preventDefault();--%>
-                <%--e.stopPropagation();--%>
-                <%--var deptId = $(this).attr("data-id");--%>
-                <%--handleDepSelected(deptId);--%>
-            <%--});--%>
-
-            <%--// 删除部门--%>
-            <%--$(".dept-delete").click(function (e){--%>
-                <%--e.preventDefault();--%>
-                <%--e.stopPropagation();--%>
-                <%--var deptId = $(this).attr("data-id");--%>
-                <%--var deptName = $(this).attr("data-name");--%>
-                <%--// js 调用的提示--%>
-                <%--if(confirm("确定要删除部门【" + deptName + "】吗？")){--%>
-                    <%--// TODO;--%>
-                    <%--// 日志--%>
-                    <%--console.log("delete dept: " + deptName);--%>
-                <%--}--%>
-            <%--});--%>
-
-            <%--// 编辑部门按钮--%>
-            <%--$(".dept-edit").click(function(e){--%>
-                <%--// 拦截默认的点击事件--%>
-                <%--e.preventDefault();--%>
-                <%--// 组织冒泡事件--%>
-                <%--e.stopPropagation();--%>
-                <%--// 取出当前行的deptId--%>
-                <%--var deptId = $(this).attr("data-id");--%>
-                <%--// handleDepSelected(deptId);--%>
-                <%--$("#dialog-dept-form").dialog({--%>
-                    <%--model: true,--%>
-                    <%--title: "编辑部门",--%>
-                    <%--open:function(event, ui){--%>
-                        <%--$(".ui-dialog-titlebar-close", $(this).parent()).hide();--%>
-                        <%--optionStr = "<option value=\"0\">-</option>";--%>
-                        <%--recursiveRenderDeptSelect(deptList, 1);--%>
-                        <%--$("#deptFrom")[0].reset();--%>
-                        <%--$("#parentId").html(optionStr);--%>
-                        <%--$("#deptId").val(deptId);--%>
-                        <%--var targetDept = deptMap[deptId];--%>
-                        <%--if(targetDept){--%>
-                            <%--$("#parentId").val(targetDept.parentid);--%>
-                            <%--$("#deptName").val(targetDept.name);--%>
-                            <%--$("#deptSel").val(targetDept.seq);--%>
-                            <%--$("#deptRemark").val(targetDept.remark);--%>
-                        <%--}--%>
-                    <%--},--%>
-                    <%--buttons : {--%>
-                        <%--"更新":function(e){--%>
-                            <%--e.preventDefault()--%>
-                            <%--updateDept(false, function(data){--%>
-                                <%--// 关闭掉dialog--%>
-                                <%--$("#dialog-dept-form").dialog("close");--%>
-                            <%--},function (data){// 失败之后回调的函数--%>
-                                <%--showMessage("更新部门", data.msg, false);--%>
-                            <%--})--%>
-                        <%--},--%>
-                        <%--"取消": function(){--%>
-                            <%--$("#dialog-dept-form").dialog("close");--%>
-                        <%--}--%>
-                    <%--}--%>
-                <%--});--%>
-            <%--})--%>
-        <%--}--%>
-
-        <%--// 每次点击取出当前的数据--%>
-        <%--function handleDepSelected(deptId){--%>
-            <%--if(lastClickDeptId == -1){--%>
-                <%--// 找到上级部门--%>
-                <%--var lastDept = $("#dept_" + lastClickDeptId + " .dd2-content: first");--%>
-                <%--lastDept.removeClass("btn-yellow");--%>
-                <%--lastDept.removeClass("no-hover");--%>
-            <%--}--%>
-            <%--var currentDept = $("#dept_" + deptId + " .dd2-content: first");--%>
-            <%--currentDept.addClass("btn-yellow");--%>
-            <%--currentDept.addClass("no-hover");--%>
-            <%--lastClickDeptId = deptId;--%>
-            <%--loadUserList(deptId);--%>
-        <%--}--%>
-
-        <%--// 在点击之后 做一次部门列表加载的操作--%>
-        <%--function loadUserList(deptId){--%>
-            <%--// TODO:--%>
-            <%--console.log("load userlist, deptId:" + deptId);--%>
-        <%--}--%>
-
-        <%--// 新增部门的点击操作--%>
-        <%--$(".dept-add").click(function(){--%>
-            <%--$("#dialog-dept-form").dialog({--%>
-                <%--model: true,--%>
-                <%--title: "新增部门",--%>
-                <%--open:function(event, ui){--%>
-                    <%--$(".ui-dialog-titlebar-close", $(this).parent()).hide();--%>
-                    <%--optionStr = "<option value=\"0\">-</option>";--%>
-                    <%--recursiveRenderDeptSelect(deptList, 1);--%>
-                    <%--$("#deptFrom")[0].reset();--%>
-                    <%--$("#parentId").html(optionStr);--%>
-                <%--},--%>
-                <%--buttons : {--%>
-                    <%--"添加":function(e){--%>
-                        <%--e.preventDefault()--%>
-                        <%--updateDept(true, function(data){--%>
-                            <%--// 关闭掉dialog--%>
-                            <%--$("#dialog-dept-form").dialog("close");--%>
-                        <%--},function (data){// 失败之后回调的函数--%>
-                            <%--showMessage("新增部门", data.msg, false);--%>
-                        <%--})--%>
-                    <%--},--%>
-                    <%--"取消": function(){--%>
-                        <%--$("#dialog-dept-form").dialog("close");--%>
-                    <%--}--%>
-                <%--}--%>
-            <%--});--%>
-        <%--});--%>
-
-        <%--// 递归的 展示出 optionStr 的 HTML--%>
-        <%--function recursiveRenderDeptSelect(deptList, level){--%>
-            <%--// 如果当前 level 没有传值的话，让 level 为0--%>
-            <%--level = level | 0;--%>
-            <%--if(deptList && deptList.length > 0){--%>
-                <%--$(deptList).each(function (i, dept){--%>
-                    <%--// 每次都更新 deptMap--%>
-                    <%--deptMap[dept.id] = dept;--%>
-                    <%--var blank = "";--%>
-                    <%--// 如果当前 level 不是第一层的话--%>
-                    <%--if (level > 1){--%>
-                        <%--// 这里每个层级都加 .. 来区分一下--%>
-                        <%--for(var j = 3; j <= level; j++){--%>
-                            <%--blank += "..";--%>
-                        <%--}--%>
-                        <%--// 用特殊字符来展示出当前层级结构--%>
-                        <%--blank += "|--";--%>
-                    <%--}--%>
-                    <%--optionStr += Mustache.render("<option value='{{id}}'>{{name}}</option>"), {id: dept.id, name: blank + dept.name};--%>
-                    <%--if ( dept.deptList && dept.deptList.level > 0 ){--%>
-                        <%--recursiveRenderDeptSelect(dept.deptList, level + 1 );--%>
-                    <%--}--%>
-                <%--});--%>
-            <%--}--%>
-        <%--}--%>
-
-        <%--// 新增或更新的方法--%>
-        <%--function updateDept(isCreate, successCallback, failCallback){--%>
-            <%--$.ajax({--%>
-                <%--url:isCreate ? "/sys/dept/save.json" : "/sys/dept/update.json",--%>
-                <%--date: $("deptFrom").serializeArray(),--%>
-                <%--type: "POST",--%>
-                <%--success: function(result){--%>
-                    <%--if(result.ret){--%>
-                        <%--loadDeptTree();--%>
-                        <%--if(successCallback){--%>
-                            <%--successCallback(result);--%>
-                        <%--}--%>
-                    <%--} else {--%>
-                        <%--if (failCallback){--%>
-                            <%--failCallback(result);--%>
-                        <%--}--%>
-                    <%--}--%>
-                <%--}--%>
-            <%--})--%>
-
-        <%--}--%>
-    <%--})--%>
-<%--</script>--%>
-<%--<script id="userListTemplate" type="x-tmpl-mustache">--%>
-<%--{{#userList}}--%>
-<%--<tr role="row" class="user-name odd" data-id="{{id}}"><!--even -->--%>
-    <%--<td><a href="#" class="user-edit" data-id="{{id}}">{{username}}</a></td>--%>
-    <%--<td>{{showDeptName}}</td>--%>
-    <%--<td>{{mail}}</td>--%>
-    <%--<td>{{telephone}}</td>--%>
-    <%--<td>{{#bold}}{{showStatus}}{{/bold}}</td> <!-- 此处套用函数对status做特殊处理 -->--%>
-    <%--<td>--%>
-        <%--<div class="hidden-sm hidden-xs action-buttons">--%>
-            <%--<a class="green user-edit" href="#" data-id="{{id}}">--%>
-                <%--<i class="ace-icon fa fa-pencil bigger-100"></i>--%>
-            <%--</a>--%>
-            <%--<a class="red user-acl" href="#" data-id="{{id}}">--%>
-                <%--<i class="ace-icon fa fa-flag bigger-100"></i>--%>
-            <%--</a>--%>
-        <%--</div>--%>
-    <%--</td>--%>
-<%--</tr>--%>
-<%--{{/userList}}--%>
-<%--</script>--%>
+<script id="userListTemplate" type="x-tmpl-mustache">
+{{#userList}}
+<tr role="row" class="user-name odd" data-id="{{id}}"><!--even -->
+    <td><a href="#" class="user-edit" data-id="{{id}}">{{username}}</a></td>
+    <td>{{showDeptName}}</td>
+    <td>{{mail}}</td>
+    <td>{{telephone}}</td>
+    <td>{{#bold}}{{showStatus}}{{/bold}}</td> <!-- 此处套用函数对status做特殊处理 -->
+    <td>
+        <div class="hidden-sm hidden-xs action-buttons">
+            <a class="green user-edit" href="#" data-id="{{id}}">
+                <i class="ace-icon fa fa-pencil bigger-100"></i>
+            </a>
+            <a class="red user-acl" href="#" data-id="{{id}}">
+                <i class="ace-icon fa fa-flag bigger-100"></i>
+            </a>
+        </div>
+    </td>
+</tr>
+{{/userList}}
+</script>
 
 <script type="application/javascript">
     $(function() {
