@@ -3,16 +3,19 @@ package com.winston.service;
 import com.google.common.base.Preconditions;
 import com.winston.beans.PageQuery;
 import com.winston.beans.PageResult;
+import com.winston.common.RequestHolder;
 import com.winston.dao.SysUserMapper;
 import com.winston.exception.ParamException;
 import com.winston.model.SysUser;
 import com.winston.param.UserParam;
 import com.winston.util.BeanValidator;
+import com.winston.util.IpUtil;
 import com.winston.util.MD5Util;
 import com.winston.util.PasswordUtil;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
+
 
 /**
  * @Author: 于新泽
@@ -48,8 +51,8 @@ public class SysUserService {
                 .status(param.getStatus())
                 .remark(param.getRemark())
                 .build();
-        user.setOperator("system");
-        user.setOperator("127.0.0.1");
+        user.setOperator(RequestHolder.getCurrentUser().getUsername());
+        user.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequset()));
         //user.setOperator(new Date());
         // TODO: sendEmail
 
@@ -71,9 +74,12 @@ public class SysUserService {
                 .username(param.getUsername())
                 .telephone(param.getTelephone())
                 .deptId(param.getDeptId())
+                .mail(param.getMail())
                 .status(param.getStatus())
                 .remark(param.getRemark())
                 .build();
+        after.setOperator(RequestHolder.getCurrentUser().getUsername());
+        after.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequset()));
         sysUserMapper.updateByPrimaryKeySelective(after);
     }
 

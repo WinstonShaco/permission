@@ -57,6 +57,7 @@ public class HttpInterceptor extends HandlerInterceptorAdapter{
         long start = (long)request.getAttribute(START_TIME);
         long end = System.currentTimeMillis();
         log.info("request finished. url:{},cost:{}",url , end - start);
+        RequestHolder.remove();
     }
 
     /**
@@ -70,14 +71,16 @@ public class HttpInterceptor extends HandlerInterceptorAdapter{
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         //拿到当前请求
-        String url = request.getRequestURI().toString();
+//        String url = request.getRequestURI().toString();
         //取当前请求的参数
         //Map parameterMap = request.getParameterMap();
-        long start = (long)request.getAttribute(START_TIME);
-        long end = System.currentTimeMillis();
-        log.info("request compele. url:{},cost:{}",url , end - start);
-
+//        long start = (long)request.getAttribute(START_TIME);
+//        long end = System.currentTimeMillis();
+//        log.info("request compele. url:{},cost:{}",url , end - start);
+        removeThreadLocalInfo();
     }
 
-
+    public void removeThreadLocalInfo(){
+        RequestHolder.remove();
+    }
 }

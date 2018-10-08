@@ -1,11 +1,13 @@
 package com.winston.service;
 
 import com.google.common.base.Preconditions;
+import com.winston.common.RequestHolder;
 import com.winston.dao.SysDeptMapper;
 import com.winston.exception.ParamException;
 import com.winston.model.SysDept;
 import com.winston.param.DeptParam;
 import com.winston.util.BeanValidator;
+import com.winston.util.IpUtil;
 import com.winston.util.LevelUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -45,8 +47,8 @@ public class SysDeptService {
                 .build();
 
         dept.setLevel(LevelUtil.calculateLevel(getLevel(param.getParentId()), param.getParentId()));
-        dept.setOperator("system");
-        dept.setOperator("127.0.0.1");
+        dept.setOperator(RequestHolder.getCurrentUser().getUsername());
+        dept.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequset()));
         //dept.setOperator(new Date());
         sysDeptMapper.insertSelective(dept);
     }
@@ -95,8 +97,8 @@ public class SysDeptService {
                 .remark(param.getRemark())
                 .build();
         after.setLevel(LevelUtil.calculateLevel(getLevel(param.getParentId()),param.getParentId()));
-        after.setOperator("system");
-        after.setOperator("127.0.0.1");
+        after.setOperator(RequestHolder.getCurrentUser().getUsername());
+        after.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequset()));
         //after.setOperator(new Date());
 
         updateWithChild(before,after);
