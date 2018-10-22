@@ -123,8 +123,6 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  //校验部门名称是否重复
-  int countByNameAndParentId(@Param("parentId") Integer parentId, @Param("name") String name, @Param("id") Integer id);
   <select id="countByNameAndParentId" parameterType="map" resultMap="int">
     SELECT count(1)
     from sys_acl_module
@@ -152,4 +150,9 @@
     </foreach>
   </update>
 
+    <!--getAllAclModule-->
+    <select id="getAllAclModule" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        from sys_acl_module
+    </select>
 </mapper>

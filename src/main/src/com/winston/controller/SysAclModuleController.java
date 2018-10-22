@@ -44,4 +44,10 @@ public class SysAclModuleController {
         sysAclModuleService.update(param);
         return JsonData.success();
     }
+
+    @RequestMapping("/tree.json")
+    @ResponseBody
+    public JsonData tree(){
+        return JsonData.success();
+    }
 }

@@ -3,8 +3,11 @@ package com.winston.service;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+import com.winston.dao.SysAclModuleMapper;
 import com.winston.dao.SysDeptMapper;
+import com.winston.dto.AclModuleLevelDto;
 import com.winston.dto.DeptLevelDto;
+import com.winston.model.SysAclModule;
 import com.winston.model.SysDept;
 import com.winston.util.LevelUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -26,6 +29,53 @@ public class SysTreeService {
 
     @Resource
     private SysDeptMapper sysDeptMapper;
+    @Resource
+    private SysAclModuleMapper sysAclModuleMapper;
+
+    public List<AclModuleLevelDto> aclModuleTree(){
+        List<SysAclModule> aclModuleList = sysAclModuleMapper.getAllAclModule();
+        List<AclModuleLevelDto> dtoList = Lists.newArrayList();
+        for(SysAclModule aclModule : aclModuleList){
+            dtoList.add(AclModuleLevelDto.adapt(aclModule));
+        }
+        return aclModuleListToTree(dtoList);
+    }
+
+    public List<AclModuleLevelDto> aclModuleListToTree(List<AclModuleLevelDto> dtoList){
+        if(CollectionUtils.isEmpty(dtoList)){
+            return Lists.newArrayList();
+        }
+        // level -> [aclModule1, aclModule2, ...] 以 level 为 key ，后面存储的是dept的列表
+        // List 的每一个结构都是 AclModuleLevelDto
+        Multimap<String, AclModuleLevelDto> levelAclModuleMap = ArrayListMultimap.create();
+        // 一级权限
+        List<AclModuleLevelDto> rootList = Lists.newArrayList();
+
+        for(AclModuleLevelDto dto : dtoList) {
+            levelAclModuleMap.put(dto.getLevel(), dto);
+            if(LevelUtil.ROOT.equals(dto.getLevel())){
+                rootList.add(dto);
+            }
+        }
+        Collections.sort(rootList, aclModuleSeqComparator);
+        transfromAclModuleTree(rootList, LevelUtil.ROOT, levelAclModuleMap);
+        return rootList;
+    }
+
+    public void transfromAclModuleTree(List<AclModuleLevelDto> dtoList, String level, Multimap<String, AclModuleLevelDto> levelAclModuleMap){
+
+        for(int i = 0;i < dtoList.size();i++){
+            AclModuleLevelDto dto = dtoList.get(i);
+            String nextLevel = LevelUtil.calculateLevel(level,dto.getId());
+            List<AclModuleLevelDto> tempList = (List<AclModuleLevelDto>) levelAclModuleMap.get(nextLevel);
+            if(CollectionUtils.isNotEmpty(tempList)){
+
+                Collections.sort(tempList,aclModuleSeqComparator);
+                dto.setAclModuleList(tempList);
+                transfromAclModuleTree(tempList, nextLevel , levelAclModuleMap);
+            }
+        }
+    }
 
     /**
      * 返回部门树
@@ -110,6 +160,16 @@ public class SysTreeService {
     public Comparator<DeptLevelDto> deptSeqComparator = new Comparator<DeptLevelDto>() {
         @Override
         public int compare(DeptLevelDto o1, DeptLevelDto o2) {
+            return o1.getSeq() - o2.getSeq();
+        }
+    };
+
+    /**
+     * 将权限根据 seq 进行排序
+     */
+    public Comparator<AclModuleLevelDto> aclModuleSeqComparator = new Comparator<AclModuleLevelDto>() {
+        @Override
+        public int compare(AclModuleLevelDto o1, AclModuleLevelDto o2) {
             return o1.getSeq() - o2.getSeq();
         }
     };

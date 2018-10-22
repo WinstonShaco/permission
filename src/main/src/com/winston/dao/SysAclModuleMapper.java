@@ -1,7 +1,6 @@
 package com.winston.dao;
 
 import com.winston.model.SysAclModule;
-import com.winston.model.SysDept;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,4 +27,5 @@ public interface SysAclModuleMapper {
     //批量更新level
     void batchUpdateLevel(@Param("sysAclModuleList") List<SysAclModule> sysAclModuleList);
 
+    List<SysAclModule> getAllAclModule();
 }
