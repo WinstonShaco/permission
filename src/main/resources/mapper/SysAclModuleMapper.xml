@@ -122,4 +122,34 @@
 
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  //校验部门名称是否重复
+  int countByNameAndParentId(@Param("parentId") Integer parentId, @Param("name") String name, @Param("id") Integer id);
+  <select id="countByNameAndParentId" parameterType="map" resultMap="int">
+    SELECT count(1)
+    from sys_acl_module
+    where name = #{name}
+    <if test="id != null">
+      AND id != null
+    </if>
+    <if test="parentId != null">
+      AND parentId != null
+    </if>
+  </select>
+  <!-- 取出当前权限的子权限 -->
+  <select id="getChildAclModuleListByLevel" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from sys_acl_module
+    where level like #{LEVEL} || ".%"
+  </select>
+   <!--批量更新level-->
+  <update id="batchUpdateLevel" parameterMap="map">
+    <foreach collection="sysAclModuleList" item="sysAclModule" separator=";">
+      update sys_acl_module
+      set level = #{sysAclModule.level}
+      where id = #{sysAclModule.id}
+    </foreach>
+  </update>
+
 </mapper>
