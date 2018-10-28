@@ -123,15 +123,15 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="countByNameAndParentId" parameterType="map" resultMap="int">
+  <select id="countByNameAndParentId" parameterType="map" resultType="int">
     SELECT count(1)
     from sys_acl_module
     where name = #{name}
+    <if test="parentId != null">
+      AND parent_Id != null
+    </if>
     <if test="id != null">
       AND id != null
-    </if>
-    <if test="parentId != null">
-      AND parentId != null
     </if>
   </select>
   <!-- 取出当前权限的子权限 -->
@@ -142,7 +142,7 @@
     where level like #{LEVEL} || ".%"
   </select>
    <!--批量更新level-->
-  <update id="batchUpdateLevel" parameterMap="map">
+  <update id="batchUpdateLevel" parameterType="map">
     <foreach collection="sysAclModuleList" item="sysAclModule" separator=";">
       update sys_acl_module
       set level = #{sysAclModule.level}

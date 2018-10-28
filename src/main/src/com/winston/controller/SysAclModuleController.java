@@ -4,6 +4,7 @@ import com.sun.media.sound.ModelMappedInstrument;
 import com.winston.common.JsonData;
 import com.winston.param.AclModelParam;
 import com.winston.service.SysAclModuleService;
+import com.winston.service.SysTreeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +20,14 @@ import javax.annotation.Resource;
  */
 
 @Controller
-@RequestMapping("/sys/aclModel")
+@RequestMapping("/sys/aclModule")
 @Slf4j
 public class SysAclModuleController {
 
     @Resource
     private SysAclModuleService sysAclModuleService;
+    @Resource
+    private SysTreeService sysTreeService;
 
     @RequestMapping("/acl.page")
     public ModelAndView page(){
@@ -48,6 +51,6 @@ public class SysAclModuleController {
     @RequestMapping("/tree.json")
     @ResponseBody
     public JsonData tree(){
-        return JsonData.success();
+        return JsonData.success(sysTreeService.aclModuleTree());
     }
 }

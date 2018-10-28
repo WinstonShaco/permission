@@ -58,11 +58,14 @@ public class SysTreeService {
             }
         }
         Collections.sort(rootList, aclModuleSeqComparator);
-        transfromAclModuleTree(rootList, LevelUtil.ROOT, levelAclModuleMap);
+        transformAclModuleTree(rootList, LevelUtil.ROOT, levelAclModuleMap);
         return rootList;
     }
 
-    public void transfromAclModuleTree(List<AclModuleLevelDto> dtoList, String level, Multimap<String, AclModuleLevelDto> levelAclModuleMap){
+    public void transformAclModuleTree(
+            List<AclModuleLevelDto> dtoList,
+            String level,
+            Multimap<String, AclModuleLevelDto> levelAclModuleMap){
 
         for(int i = 0;i < dtoList.size();i++){
             AclModuleLevelDto dto = dtoList.get(i);
@@ -72,7 +75,7 @@ public class SysTreeService {
 
                 Collections.sort(tempList,aclModuleSeqComparator);
                 dto.setAclModuleList(tempList);
-                transfromAclModuleTree(tempList, nextLevel , levelAclModuleMap);
+                transformAclModuleTree(tempList, nextLevel, levelAclModuleMap);
             }
         }
     }

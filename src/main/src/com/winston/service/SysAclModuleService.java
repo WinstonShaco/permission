@@ -10,6 +10,7 @@ import com.winston.param.AclModelParam;
 import com.winston.util.BeanValidator;
 import com.winston.util.IpUtil;
 import com.winston.util.LevelUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +42,7 @@ public class SysAclModuleService {
                 .status(param.getStatus())
                 .remark(param.getRemark())
                 .build();
+        aclModule.setLevel(LevelUtil.calculateLevel(getLevel(param.getParentId()), param.getParentId()));
         aclModule.setOperator(RequestHolder.getCurrentUser().getUsername());
         aclModule.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequset()));
         // aclModule.setOperateTime(new Date());
@@ -56,6 +58,7 @@ public class SysAclModuleService {
         Preconditions.checkNotNull(before,"待更新的权限不存在");
         SysAclModule after = SysAclModule
                 .builder()
+                .id(param.getId())
                 .name(param.getName())
                 .parentId(param.getParentId())
                 .seq(param.getSeq())
@@ -76,19 +79,28 @@ public class SysAclModuleService {
         String oldLevelPrefix = before.getLevel();
         if(!after.getLevel().equals(before.getLevel())){
             List<SysAclModule> aclModuleList = sysAclModuleMapper.getChildAclModuleListByLevel(before.getLevel());
-            for(SysAclModule aclModule: aclModuleList){
-                String level = aclModule.getLevel();
-                if(level.indexOf(oldLevelPrefix) == 0){
-                    level = newLevelPrefix + level.substring(oldLevelPrefix.length());
-                    aclModule.setLevel(level);
+            if (CollectionUtils.isNotEmpty(aclModuleList)) {
+                for (SysAclModule aclModule : aclModuleList) {
+                    String level = aclModule.getLevel();
+                    if(level.indexOf(oldLevelPrefix) == 0){
+                        level = newLevelPrefix + level.substring(oldLevelPrefix.length());
+                        aclModule.setLevel(level);
+                    }
                 }
+                sysAclModuleMapper.batchUpdateLevel(aclModuleList);
             }
-            sysAclModuleMapper.batchUpdateLevel(aclModuleList);
         }
         sysAclModuleMapper.updateByPrimaryKeySelective(after);
 
     }
 
+    /**
+     * 校验权限名称是否一样
+     * @param parentId
+     * @param aclModuleName
+     * @param deptId
+     * @return
+     */
     private boolean checkExist(Integer parentId, String aclModuleName, Integer deptId){
         return sysAclModuleMapper.countByNameAndParentId(parentId, aclModuleName, deptId) > 0;
     }
