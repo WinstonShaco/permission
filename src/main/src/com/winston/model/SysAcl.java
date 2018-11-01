@@ -1,5 +1,9 @@
 package com.winston.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 /**
  * @Author: 于新泽
  * @Date: Created in 14:49 2018/8/27.
@@ -7,7 +11,9 @@ package com.winston.model;
  * 权限表
  */
 
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SysAcl {
 
     //权限id
