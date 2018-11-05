@@ -1,5 +1,9 @@
 package com.winston.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 /**
  * @Author: 于新泽
  * @Date: Created in 18:06 2018/8/29.
@@ -7,6 +11,9 @@ package com.winston.model;
  * 角色表
  */
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SysRole {
 
     //角色ID
